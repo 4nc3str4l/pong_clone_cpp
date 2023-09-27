@@ -11,7 +11,8 @@ FetchContent_MakeAvailable(SFML)
 
 file(GLOB_RECURSE SOURCES src/*.cpp src/*.hpp)
 
-add_executable(CMakeSFMLProject ${SOURCES})
+add_executable(CMakeSFMLProject ${SOURCES}
+        src/ParticleEmitter.h)
 target_link_libraries(CMakeSFMLProject PRIVATE sfml-graphics)
 target_compile_features(CMakeSFMLProject PRIVATE cxx_std_17)
 

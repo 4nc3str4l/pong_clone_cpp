@@ -10,7 +10,7 @@ UI::UI(Game* game) : m_Game(game)
 
 bool UI::Init()
 {
-    if (!font.loadFromFile("C:\\Users\\cmuri\\Desktop\\paddle_cpp\\ARCADECLASSIC.TTF"))
+    if (!font.loadFromFile("C:\\Users\\cmuri\\Desktop\\pong_clone_cpp\\ARCADECLASSIC.TTF"))
 	{
 		std::cout << "Error loading font" << std::endl;
         return false;

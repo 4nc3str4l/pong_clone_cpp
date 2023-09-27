@@ -5,7 +5,7 @@
 
 Ball::Ball() : Entity(new sf::CircleShape())
 {
-    sf::CircleShape* circle = static_cast<sf::CircleShape*>(m_shape);
+    auto* circle = dynamic_cast<sf::CircleShape*>(m_shape);
     circle->setRadius(10.0f);
     circle->setFillColor(sf::Color::White);
     circle->setOrigin(circle->getRadius(), circle->getRadius());
@@ -15,6 +15,17 @@ Ball::Ball() : Entity(new sf::CircleShape())
 void Ball::Update(float dt, sf::RenderWindow& window)
 {
     m_shape->move(m_Velocity * dt);
+    if((m_Velocity.x != 0 || m_Velocity.y != 0) && m_NextParticleEmit <= 0)
+    {
+        m_ParticleEmitter.Emit(GetPosition(),
+                               -m_Velocity * 0.1f,
+                               0.5f,
+                               sf::Color{150, 150, 150});
+        m_NextParticleEmit =  EMISSION_RATE;
+    }
+    m_NextParticleEmit -= dt;
+
+    m_ParticleEmitter.Update(dt);
 }
 
 void Ball::ResetPosition()
@@ -31,6 +42,7 @@ void Ball::ChooseInitialVelocity()
 
 void Ball::Render(sf::RenderWindow& window)
 {
+    m_ParticleEmitter.Render(window);
     window.draw(*m_shape);
 }
 

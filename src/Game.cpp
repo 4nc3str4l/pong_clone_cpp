@@ -123,6 +123,11 @@ void Game::InGameUpdate(float dt, sf::RenderWindow &window)
     {
         OnPlayerScored(false);
     }
+
+    if (Input::IsKeyPressed(sf::Keyboard::P))
+    {
+		SetGameState(GameState::Paused);
+	}
 }
 
 void Game::OnPlayerScored(bool isLeftPlayer)
@@ -161,22 +166,9 @@ void Game::StartingGame(float dt, sf::RenderWindow &window)
 
 void Game::UpdatePaused(float dt, sf::RenderWindow &window)
 {
-    for (auto event = sf::Event{}; window.pollEvent(event);)
+    if (Input::IsKeyPressed(sf::Keyboard::Space))
     {
-        if (event.type == sf::Event::Closed)
-        {
-            window.close();
-        }
-
-        if (event.type == sf::Event::KeyReleased)
-        {
-            switch (event.key.code)
-            {
-            case sf::Keyboard::P:
-                SetGameState(GameState::Playing);
-                break;
-            }
-        }
+        SetGameState(GameState::Playing);
     }
 }
 
