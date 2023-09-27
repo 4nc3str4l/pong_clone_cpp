@@ -2,6 +2,7 @@
 #include "constants.h"
 #include "Player.h"
 #include <SFML/Graphics.hpp>
+#include "Maths.h"
 
 Ball::Ball() : Entity(new sf::CircleShape())
 {
@@ -20,7 +21,8 @@ void Ball::Update(float dt, sf::RenderWindow& window)
         m_ParticleEmitter.Emit(GetPosition(),
                                -m_Velocity * 0.1f,
                                0.5f,
-                               sf::Color{150, 150, 150});
+                               sf::Color{150, 150, 150},
+                               Radius);
         m_NextParticleEmit =  EMISSION_RATE;
     }
     m_NextParticleEmit -= dt;
@@ -51,11 +53,13 @@ void Ball::CheckBoundaries()
 	if (GetPosition().y < 0)
 	{
 		m_Velocity.y = -m_Velocity.y;
-	}
+        EmitRandomParticles(5);
+    }
 
 	if (GetPosition().y + Radius * 2 > WINDOW_HEIGHT)
 	{
 		m_Velocity.y = -m_Velocity.y;
+        EmitRandomParticles(5);
 	}
 }
 
@@ -72,5 +76,20 @@ void Ball::CheckCollision(const Player& player)
 
 		float maxSpeedChange = 200.f;
 		m_Velocity.y += -maxSpeedChange * (relativeY / (player.Size.y / 2));
-	}
+
+        EmitRandomParticles(10);
+    }
+}
+
+void Ball::EmitRandomParticles(int num)
+{
+    for(int i = 0; i < num; ++i)
+    {
+        auto direction = randomDirection2D() * 400.f;
+        m_ParticleEmitter.Emit(GetPosition(),
+                               direction,
+                               0.2f,
+                               sf::Color{150, 150, 150},
+                               Radius * 0.5f);
+    }
 }

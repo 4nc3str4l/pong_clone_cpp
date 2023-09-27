@@ -17,6 +17,7 @@ public:
     void ResetPosition();
     void CheckBoundaries();
     void CheckCollision(const Player& player);
+    void EmitRandomParticles(int num);
 
 public:
     float Radius{0.0f};
