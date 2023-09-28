@@ -9,6 +9,7 @@
 class Player;
 
 inline const float EMISSION_RATE = 0.01f;
+inline const float BALL_SPEED = 450.0f;
 
 class Ball : public Entity
 {

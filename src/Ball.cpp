@@ -47,7 +47,7 @@ void Ball::ChooseInitialVelocity()
     float angleRad = angleDeg * 3.14f / 180.f;
     int direction = (std::rand() % 2 == 0) ? 1 : -1;
     m_Velocity = sf::Vector2f(std::cos(angleRad) * direction,
-                              std::sin(angleRad)) * 400.f;
+                              std::sin(angleRad)) * BALL_SPEED;
 }
 
 
@@ -97,7 +97,7 @@ void Ball::EmitRandomParticles(int num)
     Shake();
     for(int i = 0; i < num; ++i)
     {
-        auto direction = randomDirection2D() * 400.f;
+        auto direction = randomDirection2D() * BALL_SPEED;
         m_ParticleEmitter.Emit(GetPosition(),
                                direction,
                                0.2f,
