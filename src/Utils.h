@@ -1,40 +1,26 @@
-#include <windows.h>
-#include <string>
 #include <iostream>
-#include <format>
+#include <string>
 #include <filesystem>
 
-std::string FindFileUpwards(const std::string& startDir, const std::string& targetFile) {
-    std::filesystem::path currentDir(startDir);
+std::string FindFileUpwards(const std::filesystem::path& startDir, const std::string& targetFile) {
+    std::filesystem::path currentDir = std::filesystem::absolute(startDir);
 
-    while (true) {
-        std::filesystem::path absPath = std::filesystem::absolute(currentDir);
-        std::string normalizedPath = absPath.string();
-        if (normalizedPath.back() == '\\' || normalizedPath.back() == '/') {
-            normalizedPath.pop_back();
+    while (!currentDir.empty()) {
+        std::filesystem::directory_iterator dirIt(currentDir), end;
+
+        for (; dirIt != end; ++dirIt) {
+            if (dirIt->is_regular_file() && dirIt->path().filename() == targetFile) {
+                return dirIt->path().string();
+            }
         }
 
-        std::string searchPattern = std::format("{}\\*", normalizedPath);
-
-        WIN32_FIND_DATA findFileData;
-        HANDLE hFind = FindFirstFile(searchPattern.c_str(), &findFileData);
-
-        if (hFind != INVALID_HANDLE_VALUE) {
-            do {
-                const std::string fileName = findFileData.cFileName;
-                if (fileName != "." && fileName != "..") {
-                    if (!(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) && fileName == targetFile) {
-                        FindClose(hFind);
-                        return std::format("{}\\{}", normalizedPath, fileName);
-                    }
-                }
-            } while (FindNextFile(hFind, &findFileData) != 0);
-            FindClose(hFind);
-        }
-
-        size_t lastSeparator = normalizedPath.find_last_of("\\/");
-        if (lastSeparator != std::string::npos) {
-            currentDir = normalizedPath.substr(0, lastSeparator);
+        if (currentDir.has_parent_path()) {
+            std::filesystem::path parentDir = currentDir.parent_path();
+            if (parentDir != currentDir) {
+                currentDir = parentDir;
+            } else {
+                break;
+            }
         } else {
             break;
         }
