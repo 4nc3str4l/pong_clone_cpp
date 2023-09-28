@@ -9,14 +9,11 @@ FetchContent_Declare(SFML
     GIT_TAG 2.6.x)
 FetchContent_MakeAvailable(SFML)
 
-file(GLOB_RECURSE SOURCES src/*.cpp src/*.hpp)
+file(GLOB_RECURSE SOURCES src/*.cpp src/*.h)
 
-add_executable(CMakeSFMLProject ${SOURCES}
-        src/ParticleEmitter.h
-        src/Maths.h
-)
+add_executable(CMakeSFMLProject ${SOURCES})
 target_link_libraries(CMakeSFMLProject PRIVATE sfml-graphics)
-target_compile_features(CMakeSFMLProject PRIVATE cxx_std_17)
+target_compile_features(CMakeSFMLProject PRIVATE cxx_std_20)
 
 if(WIN32)
     add_custom_command(

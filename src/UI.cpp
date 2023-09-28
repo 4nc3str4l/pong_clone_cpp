@@ -3,6 +3,7 @@
 #include <string>
 
 #include "Game.h"
+#include "Utils.h"
 
 UI::UI(Game* game) : m_Game(game)
 {
@@ -10,7 +11,8 @@ UI::UI(Game* game) : m_Game(game)
 
 bool UI::Init()
 {
-    if (!font.loadFromFile("C:\\Users\\cmuri\\Desktop\\pong_clone_cpp\\ARCADECLASSIC.TTF"))
+    auto f = FindFileUpwards("./", "ARCADECLASSIC.TTF");
+    if (!font.loadFromFile(f))
 	{
 		std::cout << "Error loading font" << std::endl;
         return false;
