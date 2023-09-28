@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <filesystem>
+#include <SFML/Graphics.hpp>
 
 std::string FindFileUpwards(const std::filesystem::path& startDir, const std::string& targetFile) {
     std::filesystem::path currentDir = std::filesystem::absolute(startDir);
@@ -27,4 +28,15 @@ std::string FindFileUpwards(const std::filesystem::path& startDir, const std::st
     }
 
     return "";
+}
+
+void CenterTextX(sf::Text& text, const sf::Vector2u& windowSize) {
+    // Get the bounding box of the text
+    sf::FloatRect textRect = text.getLocalBounds();
+
+    // Calculate the position to center the text in X-axis
+    float xPos = (windowSize.x - textRect.width) / 2.0f;
+
+    // Set the new position
+    text.setPosition(xPos, text.getPosition().y);
 }

@@ -37,6 +37,8 @@ private:
 
     void OnPlayerScored(bool isLeftPlayer);
 
+public:
+    sf::RenderWindow Window;
 private:
     UI m_UI;
 
@@ -51,5 +53,6 @@ private:
 
     GameState m_GameState = GameState::Starting;
 
-    sf::RenderWindow m_Window;
+    sf::RectangleShape m_ScreenRect;
+
 };

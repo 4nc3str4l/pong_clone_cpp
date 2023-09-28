@@ -2,7 +2,7 @@
 #include "constants.h"
 #include "Input.h"
 
-Game::Game() : m_Window{{WINDOW_WIDTH, WINDOW_HEIGHT}, WINDOW_TITLE}, m_UI(this)
+Game::Game() : Window{{WINDOW_WIDTH, WINDOW_HEIGHT}, WINDOW_TITLE}, m_UI(this)
 {
 }
 
@@ -17,11 +17,15 @@ bool Game::Run()
     m_MiddleLine[0].position = sf::Vector2f(370, 0);
     m_MiddleLine[1].position = sf::Vector2f(370, 500);
 
-    m_MiddleLine[0].color = sf::Color::White;
-    m_MiddleLine[1].color = sf::Color::White;
+    m_MiddleLine[0].color = sf::Color{255, 255, 255, 100};
+    m_MiddleLine[1].color = sf::Color{255, 255, 255, 100};
 
-    // Configure the ball
+    // Configure the bounce.wav
     m_Ball.ResetPosition();
+
+    m_ScreenRect.setSize(sf::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT));
+    m_ScreenRect.setFillColor(sf::Color{0, 0, 0, 200});
+    m_ScreenRect.setPosition(0, 0);
 
     sf::Clock clock;
     sf::Time dt;
@@ -29,16 +33,16 @@ bool Game::Run()
     sf::Time timeSinceLastUpdate = sf::Time::Zero;
     sf::Time TimePerFrame = sf::seconds(1.f / 60.f);
 
-    while (m_Window.isOpen())
+    while (Window.isOpen())
     {
         dt = clock.restart();
         timeSinceLastUpdate += dt;
 
         float deltaTime = timeSinceLastUpdate.asSeconds();
 
-        m_Window.clear();
+        Window.clear();
 
-        Input::Update(m_Window);
+        Input::Update(Window);
 
         while (timeSinceLastUpdate > TimePerFrame)
         {
@@ -48,7 +52,7 @@ bool Game::Run()
 
         Render();
 
-        m_Window.display();
+        Window.display();
     }
 
 
@@ -57,34 +61,41 @@ bool Game::Run()
 
 void Game::Render()
 {
-    m_Window.draw(m_MiddleLine);
-    m_LeftPaddle.Render(m_Window);
-    m_RightPaddle.Render(m_Window);
-    m_Ball.Render(m_Window);
-    m_UI.Render(m_Window);
+
+
+    Window.draw(m_MiddleLine);
+    m_LeftPaddle.Render(Window);
+    m_RightPaddle.Render(Window);
+    m_Ball.Render(Window);
+    if(m_GameState == GameState::Starting || m_GameState == GameState::Paused)
+    {
+        Window.draw(m_ScreenRect);
+    }
+    m_UI.Render(Window);
+
 }
 
 void Game::Update(float dt)
 {
 
-    m_UI.Update(dt, m_Window);
+    m_UI.Update(dt, Window);
 
-    m_LeftPaddle.Update(dt, m_Window);
-    m_RightPaddle.Update(dt, m_Window);
+    m_LeftPaddle.Update(dt, Window);
+    m_RightPaddle.Update(dt, Window);
 
     switch (m_GameState)
     {
     case GameState::Starting:
-        StartingGame(dt, m_Window);
+        StartingGame(dt, Window);
         break;
     case GameState::Playing:
-        InGameUpdate(dt, m_Window);
+        InGameUpdate(dt, Window);
         break;
     case GameState::Paused:
-        UpdatePaused(dt, m_Window);
+        UpdatePaused(dt, Window);
         break;
     case GameState::Over:
-        UpdateGameOver(dt, m_Window);
+        UpdateGameOver(dt, Window);
         break;
     default:
         break;
@@ -144,7 +155,6 @@ void Game::OnPlayerScored(bool isLeftPlayer)
         m_UI.SetRightScore(m_RightScore);
     }
 
-    m_Ball.ResetPosition();
     if (m_LeftScore == 5 || m_RightScore == 5)
     {
         m_GameState = GameState::Over;
@@ -160,8 +170,15 @@ void Game::StartingGame(float dt, sf::RenderWindow &window)
 {
     if (Input::IsKeyPressed(sf::Keyboard::Space))
     {
+        m_Ball.ResetPosition();
         m_Ball.ChooseInitialVelocity();
         SetGameState(GameState::Playing);
+    }
+
+    if(m_LeftScore != 0 || m_RightScore != 0)
+    {
+        m_Ball.EmitRandomParticles(10);
+        m_Ball.UpdateParticles(dt);
     }
 }
 

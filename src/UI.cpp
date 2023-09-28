@@ -18,7 +18,6 @@ bool UI::Init()
         return false;
 	}
 
-
     leftScore.setFont(font);
 	leftScore.setString(std::to_string(0));
 	leftScore.setCharacterSize(50);
@@ -39,11 +38,11 @@ bool UI::Init()
 
 	// Put the instruction just bellow the winner text
 	instructions.setFont(font);
-	instructions.setString("Press Space to start");
 	instructions.setCharacterSize(50);
 	instructions.setFillColor(sf::Color::White);
 	instructions.setPosition(100, 300);
 
+    SetInstruction("Press   Space   to   start");
 
     return true;
 }
@@ -99,4 +98,5 @@ void UI::SetWinner(bool isLeftPlayer)
 void UI::SetInstruction(const std::string& instruction)
 {
 	instructions.setString(instruction);
+    CenterTextX(instructions, m_Game->Window.getSize());
 }

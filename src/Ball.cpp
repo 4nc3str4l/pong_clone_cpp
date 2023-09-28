@@ -27,8 +27,13 @@ void Ball::Update(float dt, sf::RenderWindow& window)
     }
     m_NextParticleEmit -= dt;
 
-    m_ParticleEmitter.Update(dt);
+    UpdateParticles(dt);
     UpdateShake(dt);
+}
+
+void Ball::UpdateParticles(float dt)
+{
+    m_ParticleEmitter.Update(dt);
 }
 
 void Ball::ResetPosition()
@@ -39,9 +44,12 @@ void Ball::ResetPosition()
 void Ball::ChooseInitialVelocity()
 {
     float angleDeg = std::rand() % 91 - 45;
-	float angleRad = angleDeg * 3.14f / 180.f;
-	m_Velocity = sf::Vector2f(std::cos(angleRad), std::sin(angleRad)) * 400.f;
+    float angleRad = angleDeg * 3.14f / 180.f;
+    int direction = (std::rand() % 2 == 0) ? 1 : -1;
+    m_Velocity = sf::Vector2f(std::cos(angleRad) * direction,
+                              std::sin(angleRad)) * 400.f;
 }
+
 
 void Ball::Render(sf::RenderWindow& window)
 {
