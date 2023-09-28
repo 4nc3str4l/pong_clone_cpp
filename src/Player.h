@@ -5,10 +5,11 @@
 inline const sf::Vector2f PADDLE_SIZE{25.0f, 100.0f};
 inline const float PADDLE_SPEED = 350.0f;
 
+
 class Player : public Entity
 {
 public:
-    Player(bool isLeft);
+    explicit Player(bool isLeft);
     void Render(sf::RenderWindow &window) override;
     void Update(float dt, sf::RenderWindow &window) override;
 private:

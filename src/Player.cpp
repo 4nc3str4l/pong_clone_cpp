@@ -1,10 +1,12 @@
 #include "Player.h"
 #include "Input.h"
 
+#include <iostream>
+
 Player::Player(bool isLeft)
     : m_isLeft(isLeft), Entity(new sf::RectangleShape())
 {
-    sf::RectangleShape* shape = static_cast<sf::RectangleShape*>(m_shape);
+    auto shape = dynamic_cast<sf::RectangleShape*>(m_shape);
     m_upKey = isLeft ? sf::Keyboard::W : sf::Keyboard::Up;
     m_downKey = isLeft ? sf::Keyboard::S : sf::Keyboard::Down;
 
@@ -40,6 +42,8 @@ void Player::Update(float dt, sf::RenderWindow &window)
     {
         m_shape->move(0, PADDLE_SPEED * dt);
     }
+
+    UpdateShake(dt);
 }
 
 bool Player::IsCollidingUp(sf::RenderWindow &window)
@@ -51,3 +55,5 @@ bool Player::IsCollidingDown(sf::RenderWindow &window)
 {
     return m_shape->getGlobalBounds().top + m_shape->getGlobalBounds().height >= window.getSize().y;
 }
+
+

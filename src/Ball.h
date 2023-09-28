@@ -16,7 +16,7 @@ public:
     void ChooseInitialVelocity();
     void ResetPosition();
     void CheckBoundaries();
-    void CheckCollision(const Player& player);
+    void CheckCollision(Player& player);
     void EmitRandomParticles(int num);
 
 public:

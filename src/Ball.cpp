@@ -28,6 +28,7 @@ void Ball::Update(float dt, sf::RenderWindow& window)
     m_NextParticleEmit -= dt;
 
     m_ParticleEmitter.Update(dt);
+    UpdateShake(dt);
 }
 
 void Ball::ResetPosition()
@@ -63,7 +64,7 @@ void Ball::CheckBoundaries()
 	}
 }
 
-void Ball::CheckCollision(const Player& player)
+void Ball::CheckCollision(Player& player)
 {
 	sf::FloatRect playerBounds = player.GetBounds();
 	sf::FloatRect ballBounds = GetBounds();
@@ -78,11 +79,14 @@ void Ball::CheckCollision(const Player& player)
 		m_Velocity.y += -maxSpeedChange * (relativeY / (player.Size.y / 2));
 
         EmitRandomParticles(10);
+
+        player.Shake();
     }
 }
 
 void Ball::EmitRandomParticles(int num)
 {
+    Shake();
     for(int i = 0; i < num; ++i)
     {
         auto direction = randomDirection2D() * 400.f;
