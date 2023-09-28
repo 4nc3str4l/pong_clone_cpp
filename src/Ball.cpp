@@ -43,13 +43,12 @@ void Ball::ResetPosition()
 
 void Ball::ChooseInitialVelocity()
 {
-    float angleDeg = std::rand() % 91 - 45;
+    float angleDeg = randomFloat(-45.0f, 45.0f);
     float angleRad = angleDeg * 3.14f / 180.f;
-    int direction = (std::rand() % 2 == 0) ? 1 : -1;
+    int direction = (randomInt(0, 1) == 0) ? -1 : 1;
     m_Velocity = sf::Vector2f(std::cos(angleRad) * direction,
                               std::sin(angleRad)) * BALL_SPEED;
 }
-
 
 void Ball::Render(sf::RenderWindow& window)
 {

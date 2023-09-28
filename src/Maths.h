@@ -16,6 +16,10 @@ float randomFloat(float min, float max) {
     return min + dis(mt) * (max - min);
 }
 
+int randomInt(int min, int max) {
+    return min + static_cast<int>(std::floor(dis(mt) * (max - min + 1)));
+}
+
 
 sf::Vector2f randomDirection2D() {
     float angle = randomFloat(0.0f, 2.0f * M_PI);
