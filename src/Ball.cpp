@@ -38,14 +38,16 @@ void Ball::UpdateParticles(float dt)
 
 void Ball::ResetPosition()
 {
-    m_shape->setPosition(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
+    m_shape->setPosition(static_cast<float>(WINDOW_WIDTH) / 2.0f,
+                         static_cast<float>(WINDOW_HEIGHT) / 2.0f);
 }
+
 
 void Ball::ChooseInitialVelocity()
 {
     float angleDeg = randomFloat(-45.0f, 45.0f);
     float angleRad = angleDeg * 3.14f / 180.f;
-    int direction = (randomInt(0, 1) == 0) ? -1 : 1;
+    float direction = (randomInt(0, 1) == 0) ? -1 : 1;
     m_Velocity = sf::Vector2f(std::cos(angleRad) * direction,
                               std::sin(angleRad)) * BALL_SPEED;
 }
