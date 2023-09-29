@@ -88,10 +88,14 @@ void UI::SetWinner(bool isLeftPlayer)
 	if (isLeftPlayer)
 	{
 		winner.setString("Left Player Wins!");
+		CenterTextX(winner, m_Game->Window.getSize());
+		SetInstruction("Press   R   to   restart");
 	}
 	else
 	{
 		winner.setString("Right Player Wins!");
+		CenterTextX(winner, m_Game->Window.getSize());
+		SetInstruction("Press   R   to   restart");
 	}
 }
 

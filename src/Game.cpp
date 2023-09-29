@@ -3,10 +3,8 @@
 #include "Input.h"
 
 Game::Game() : Window{{WINDOW_WIDTH, WINDOW_HEIGHT}, WINDOW_TITLE},
- m_UI(this)
+               m_UI(this)
 {
-
-    
 }
 
 bool Game::Run()
@@ -35,7 +33,7 @@ bool Game::Run()
     m_TopBorder.Set(sf::Vector2f(0, 0), sf::Vector2f(WINDOW_WIDTH, broderSize));
     m_LeftBorder.Set(sf::Vector2f(0, 0), sf::Vector2f(broderSize, WINDOW_HEIGHT));
     m_RightBorder.Set(sf::Vector2f(WINDOW_WIDTH - broderSize, 0), sf::Vector2f(broderSize, WINDOW_HEIGHT));
-    
+
     m_BottomBorder.Set(sf::Vector2f(0, WINDOW_HEIGHT), sf::Vector2f(WINDOW_WIDTH, broderSize));
     m_BottomBorder.SetPivot(sf::Vector2f(0, broderSize));
 
@@ -67,13 +65,11 @@ bool Game::Run()
         Window.display();
     }
 
-
     return true;
 }
 
 void Game::Render()
 {
-
 
     Window.draw(m_MiddleLine);
     m_LeftPaddle.Render(Window);
@@ -85,12 +81,13 @@ void Game::Render()
     m_LeftBorder.Render(Window);
     m_RightBorder.Render(Window);
 
-    if(m_GameState == GameState::Starting || m_GameState == GameState::Paused)
+    if (m_GameState == GameState::Starting ||
+         m_GameState == GameState::Paused ||
+          m_GameState == GameState::Over)
     {
         Window.draw(m_ScreenRect);
     }
     m_UI.Render(Window);
-
 }
 
 void Game::Update(float dt)
@@ -150,7 +147,6 @@ void Game::InGameUpdate(float dt, sf::RenderWindow &window)
     m_Ball.CheckCollision(m_RightPaddle);
     m_Ball.CheckBoundaries(this);
 
-
     if (CheckIfLeftPlayerScored())
     {
         OnPlayerScored(true);
@@ -162,8 +158,8 @@ void Game::InGameUpdate(float dt, sf::RenderWindow &window)
 
     if (Input::IsKeyPressed(sf::Keyboard::P))
     {
-		SetGameState(GameState::Paused);
-	}
+        SetGameState(GameState::Paused);
+    }
 }
 
 void Game::OnPlayerScored(bool isLeftPlayer)
@@ -221,7 +217,7 @@ void Game::StartingGame(float dt, sf::RenderWindow &window)
         SetGameState(GameState::Playing);
     }
 
-    if(m_LeftScore != 0 || m_RightScore != 0)
+    if (m_LeftScore != 0 || m_RightScore != 0)
     {
         m_Ball.EmitRandomParticles(10);
         m_Ball.UpdateParticles(dt);
