@@ -4,6 +4,7 @@
 #include "ParticleEmitter.h"
 #include <SFML/Audio.hpp>
 
+class Game;
 class Player;
 
 inline const float EMISSION_RATE = 0.01f;
@@ -17,7 +18,7 @@ public:
     void Render(sf::RenderWindow &window) override;
     void ChooseInitialVelocity();
     void ResetPosition();
-    void CheckBoundaries();
+    void CheckBoundaries(Game* game);
     void CheckCollision(Player& player);
     void EmitRandomParticles(int num);
     void UpdateParticles(float dt);

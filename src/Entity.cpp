@@ -12,11 +12,14 @@ Entity::~Entity()
 }
 
 
-void Entity::Shake()
+void Entity::Shake(float duration, float scale)
 {
-    m_MissingShakeTime = SHAKE_TIME;
+    m_MissingShakeTime = duration;
+    m_ShakeScale = scale;
+    m_ShakeTime = duration;
 }
 
+#include <iostream>
 void Entity::UpdateShake(float dt)
 {
     m_MissingShakeTime -= dt;
@@ -24,7 +27,7 @@ void Entity::UpdateShake(float dt)
 
     if (m_MissingShakeTime > 0)
     {
-        float t = m_MissingShakeTime / SHAKE_TIME;
+        float t = m_MissingShakeTime / m_ShakeTime;
 
         if (t > 0.5f)
         {
@@ -34,6 +37,8 @@ void Entity::UpdateShake(float dt)
         {
             scale = 1.1f - t;
         }
+
+        scale *= m_ShakeScale;
     }
     else
     {

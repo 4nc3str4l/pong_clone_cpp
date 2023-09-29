@@ -5,13 +5,22 @@
 #include "UI.h"
 #include "Player.h"
 #include "Ball.h"
+#include "Border.h"
 
-enum class GameState
+enum GameState
 {
     Starting,
     Playing,
     Paused,
     Over
+};
+
+enum BorderType
+{
+    Top,
+    Bottom,
+    Left,
+    Right
 };
 
 class Game
@@ -24,6 +33,7 @@ public:
     void Update(float dt);
 
     inline GameState GetGameState() const { return m_GameState; }
+    void ShakeBorder(BorderType borderType);
 
 private:
     bool CheckIfLeftPlayerScored();
@@ -39,6 +49,7 @@ private:
 
 public:
     sf::RenderWindow Window;
+
 private:
     UI m_UI;
 
@@ -51,8 +62,12 @@ private:
     Player m_RightPaddle{false};
     Ball m_Ball;
 
+    Border m_TopBorder;
+    Border m_BottomBorder;
+    Border m_LeftBorder;
+    Border m_RightBorder;
+
     GameState m_GameState = GameState::Starting;
 
     sf::RectangleShape m_ScreenRect;
-
 };

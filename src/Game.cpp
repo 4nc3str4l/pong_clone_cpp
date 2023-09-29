@@ -2,8 +2,11 @@
 #include "constants.h"
 #include "Input.h"
 
-Game::Game() : Window{{WINDOW_WIDTH, WINDOW_HEIGHT}, WINDOW_TITLE}, m_UI(this)
+Game::Game() : Window{{WINDOW_WIDTH, WINDOW_HEIGHT}, WINDOW_TITLE},
+ m_UI(this)
 {
+
+    
 }
 
 bool Game::Run()
@@ -26,6 +29,15 @@ bool Game::Run()
     m_ScreenRect.setSize(sf::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT));
     m_ScreenRect.setFillColor(sf::Color{0, 0, 0, 200});
     m_ScreenRect.setPosition(0, 0);
+
+    // Setup borders
+    int broderSize = 6;
+    m_TopBorder.Set(sf::Vector2f(0, 0), sf::Vector2f(WINDOW_WIDTH, broderSize));
+    m_LeftBorder.Set(sf::Vector2f(0, 0), sf::Vector2f(broderSize, WINDOW_HEIGHT));
+    m_RightBorder.Set(sf::Vector2f(WINDOW_WIDTH - broderSize, 0), sf::Vector2f(broderSize, WINDOW_HEIGHT));
+    
+    m_BottomBorder.Set(sf::Vector2f(0, WINDOW_HEIGHT), sf::Vector2f(WINDOW_WIDTH, broderSize));
+    m_BottomBorder.SetPivot(sf::Vector2f(0, broderSize));
 
     sf::Clock clock;
     sf::Time dt;
@@ -67,6 +79,12 @@ void Game::Render()
     m_LeftPaddle.Render(Window);
     m_RightPaddle.Render(Window);
     m_Ball.Render(Window);
+
+    m_TopBorder.Render(Window);
+    m_BottomBorder.Render(Window);
+    m_LeftBorder.Render(Window);
+    m_RightBorder.Render(Window);
+
     if(m_GameState == GameState::Starting || m_GameState == GameState::Paused)
     {
         Window.draw(m_ScreenRect);
@@ -82,6 +100,11 @@ void Game::Update(float dt)
 
     m_LeftPaddle.Update(dt, Window);
     m_RightPaddle.Update(dt, Window);
+
+    m_TopBorder.Update(dt, Window);
+    m_BottomBorder.Update(dt, Window);
+    m_LeftBorder.Update(dt, Window);
+    m_RightBorder.Update(dt, Window);
 
     switch (m_GameState)
     {
@@ -125,7 +148,8 @@ void Game::InGameUpdate(float dt, sf::RenderWindow &window)
     m_Ball.Update(dt, window);
     m_Ball.CheckCollision(m_LeftPaddle);
     m_Ball.CheckCollision(m_RightPaddle);
-    m_Ball.CheckBoundaries();
+    m_Ball.CheckBoundaries(this);
+
 
     if (CheckIfLeftPlayerScored())
     {
@@ -148,11 +172,13 @@ void Game::OnPlayerScored(bool isLeftPlayer)
     {
         m_LeftScore++;
         m_UI.SetLeftScore(m_LeftScore);
+        ShakeBorder(BorderType::Right);
     }
     else
     {
         m_RightScore++;
         m_UI.SetRightScore(m_RightScore);
+        ShakeBorder(BorderType::Left);
     }
 
     if (m_LeftScore == 5 || m_RightScore == 5)
@@ -163,6 +189,26 @@ void Game::OnPlayerScored(bool isLeftPlayer)
     else
     {
         SetGameState(GameState::Starting);
+    }
+}
+
+#include <iostream>
+void Game::ShakeBorder(BorderType borderType)
+{
+    switch (borderType)
+    {
+    case BorderType::Top:
+        m_TopBorder.Shake(0.1, 2);
+        break;
+    case BorderType::Bottom:
+        m_BottomBorder.Shake(0.1, 2);
+        break;
+    case BorderType::Left:
+        m_LeftBorder.Shake(0.1, 2);
+        break;
+    case BorderType::Right:
+        m_RightBorder.Shake(0.1, 2);
+        break;
     }
 }
 

@@ -3,6 +3,7 @@
 #include "Player.h"
 #include <SFML/Graphics.hpp>
 #include "Maths.h"
+#include "Game.h"
 
 Ball::Ball() : Entity(new sf::CircleShape())
 {
@@ -58,18 +59,20 @@ void Ball::Render(sf::RenderWindow& window)
     window.draw(*m_shape);
 }
 
-void Ball::CheckBoundaries()
+void Ball::CheckBoundaries(Game* game)
 {
 	if (GetPosition().y < 0)
 	{
 		m_Velocity.y = -m_Velocity.y;
         EmitRandomParticles(5);
+        game->ShakeBorder(BorderType::Top);
     }
 
 	if (GetPosition().y + Radius * 2 > WINDOW_HEIGHT)
 	{
 		m_Velocity.y = -m_Velocity.y;
         EmitRandomParticles(5);
+        game->ShakeBorder(BorderType::Bottom);
 	}
 }
 
