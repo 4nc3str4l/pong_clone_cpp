@@ -1,9 +1,12 @@
+#pragma once
+
 #include <iostream>
 #include <string>
 #include <filesystem>
+
 #include <SFML/Graphics.hpp>
 
-std::string FindFileUpwards(const std::filesystem::path& startDir, const std::string& targetFile) {
+inline std::string FindFileUpwards(const std::filesystem::path& startDir, const std::string& targetFile) {
     std::filesystem::path currentDir = std::filesystem::absolute(startDir);
 
     while (!currentDir.empty()) {
@@ -30,7 +33,7 @@ std::string FindFileUpwards(const std::filesystem::path& startDir, const std::st
     return "";
 }
 
-void CenterTextX(sf::Text& text, const sf::Vector2u& windowSize) {
+inline void CenterTextX(sf::Text& text, const sf::Vector2u& windowSize) {
     // Get the bounding box of the text
     sf::FloatRect textRect = text.getLocalBounds();
 

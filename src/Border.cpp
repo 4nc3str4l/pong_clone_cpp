@@ -5,7 +5,7 @@ Border::Border()
 {
 }
 
-void Border::Render(sf::RenderWindow &window)
+void Border::Render(sf::RenderTexture& window)
 {
     window.draw(*m_shape);
 }

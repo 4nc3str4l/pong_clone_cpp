@@ -4,6 +4,7 @@
 
 #include "Game.h"
 #include "Utils.h"
+#include "constants.h"
 
 UI::UI(Game* game) : m_Game(game)
 {
@@ -47,7 +48,7 @@ bool UI::Init()
     return true;
 }
 
-void UI::Render(sf::RenderWindow& window)
+void UI::Render(sf::RenderTexture& window)
 {
     window.draw(leftScore);
     window.draw(rightScore);
@@ -88,13 +89,13 @@ void UI::SetWinner(bool isLeftPlayer)
 	if (isLeftPlayer)
 	{
 		winner.setString("Left Player Wins!");
-		CenterTextX(winner, m_Game->Window.getSize());
+		CenterTextX(winner, {WINDOW_WIDTH, WINDOW_HEIGHT});
 		SetInstruction("Press   R   to   restart");
 	}
 	else
 	{
 		winner.setString("Right Player Wins!");
-		CenterTextX(winner, m_Game->Window.getSize());
+		CenterTextX(winner, { WINDOW_WIDTH, WINDOW_HEIGHT });
 		SetInstruction("Press   R   to   restart");
 	}
 }
@@ -102,5 +103,5 @@ void UI::SetWinner(bool isLeftPlayer)
 void UI::SetInstruction(const std::string& instruction)
 {
 	instructions.setString(instruction);
-    CenterTextX(instructions, m_Game->Window.getSize());
+    CenterTextX(instructions, { WINDOW_WIDTH, WINDOW_HEIGHT });
 }

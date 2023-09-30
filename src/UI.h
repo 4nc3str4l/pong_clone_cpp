@@ -10,7 +10,7 @@ public:
     UI(Game* game);
     bool Init();
 
-    void Render(sf::RenderWindow& window);
+    void Render(sf::RenderTexture& window);
     void Update(float dt, sf::RenderWindow& window);
 
     void SetLeftScore(uint8_t score);

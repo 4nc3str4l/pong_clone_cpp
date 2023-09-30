@@ -1,7 +1,9 @@
 #include "Player.h"
 #include "Input.h"
+#include "constants.h"
 
 #include <iostream>
+
 
 Player::Player(bool isLeft)
     : m_isLeft(isLeft), Entity(new sf::RectangleShape())
@@ -19,13 +21,13 @@ Player::Player(bool isLeft)
     }
     else
     {
-        m_shape->setPosition(720, 200);
+        m_shape->setPosition(WINDOW_WIDTH - 20, 200);
     }
 
     Size = shape->getSize();
 }
 
-void Player::Render(sf::RenderWindow &window)
+void Player::Render(sf::RenderTexture& window)
 {
     window.draw(*m_shape);
 }
@@ -53,7 +55,7 @@ bool Player::IsCollidingUp(sf::RenderWindow &window)
 
 bool Player::IsCollidingDown(sf::RenderWindow &window)
 {
-    return m_shape->getGlobalBounds().top + m_shape->getGlobalBounds().height >= window.getSize().y;
+    return m_shape->getGlobalBounds().top + m_shape->getGlobalBounds().height >= WINDOW_HEIGHT;
 }
 
 

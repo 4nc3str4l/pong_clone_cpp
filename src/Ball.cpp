@@ -37,7 +37,7 @@ void Ball::UpdateParticles(float dt)
     m_ParticleEmitter.Update(dt);
 }
 
-void Ball::ResetPosition()
+void Ball::ResetPosition(Game& game)
 {
     m_shape->setPosition(static_cast<float>(WINDOW_WIDTH) / 2.0f,
                          static_cast<float>(WINDOW_HEIGHT) / 2.0f);
@@ -53,7 +53,7 @@ void Ball::ChooseInitialVelocity()
                               std::sin(angleRad)) * BALL_SPEED;
 }
 
-void Ball::Render(sf::RenderWindow& window)
+void Ball::Render(sf::RenderTexture& window)
 {
     m_ParticleEmitter.Render(window);
     window.draw(*m_shape);

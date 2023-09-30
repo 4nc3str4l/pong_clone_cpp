@@ -15,9 +15,9 @@ class Ball : public Entity
 public:
     Ball();
     void Update(float dt, sf::RenderWindow &window) override;
-    void Render(sf::RenderWindow &window) override;
+    void Render(sf::RenderTexture& window) override;
     void ChooseInitialVelocity();
-    void ResetPosition();
+    void ResetPosition(Game& game);
     void CheckBoundaries(Game* game);
     void CheckCollision(Player& player);
     void EmitRandomParticles(int num);

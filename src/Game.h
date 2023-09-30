@@ -47,10 +47,8 @@ private:
 
     void OnPlayerScored(bool isLeftPlayer);
 
-public:
-    sf::RenderWindow Window;
-
 private:
+    sf::RenderWindow Window;
     UI m_UI;
 
     uint8_t m_LeftScore = 0;
@@ -70,4 +68,10 @@ private:
     GameState m_GameState = GameState::Starting;
 
     sf::RectangleShape m_ScreenRect;
+
+    sf::Shader m_crtShader;
+    sf::RenderStates states;
+    sf::RenderTexture m_renderTexture;
+    sf::Sprite m_renderSprite;
+    sf::Clock m_clock;
 };

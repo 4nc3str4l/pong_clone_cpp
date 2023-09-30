@@ -1,6 +1,9 @@
 #include "Game.h"
 #include "constants.h"
 #include "Input.h"
+#include "Utils.h"
+
+
 
 Game::Game() : Window{{WINDOW_WIDTH, WINDOW_HEIGHT}, WINDOW_TITLE},
                m_UI(this)
@@ -21,8 +24,7 @@ bool Game::Run()
     m_MiddleLine[0].color = sf::Color{255, 255, 255, 100};
     m_MiddleLine[1].color = sf::Color{255, 255, 255, 100};
 
-    // Configure the bounce.wav
-    m_Ball.ResetPosition();
+    m_Ball.ResetPosition(*this);
 
     m_ScreenRect.setSize(sf::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT));
     m_ScreenRect.setFillColor(sf::Color{0, 0, 0, 200});
@@ -42,6 +44,20 @@ bool Game::Run()
 
     sf::Time timeSinceLastUpdate = sf::Time::Zero;
     sf::Time TimePerFrame = sf::seconds(1.f / 60.f);
+
+    if (!m_crtShader.loadFromFile(FindFileUpwards("./", "crt.vert"), FindFileUpwards("./", "crt.frag")))
+    {
+        std::cout << "Error loading shaders" << std::endl;
+        return false;
+    }
+
+    if(!m_renderTexture.create(WINDOW_WIDTH, WINDOW_HEIGHT))
+    {
+        std::cout << "Error creating render texture" << std::endl;
+        return false;
+    }
+
+    states.shader = &m_crtShader;
 
     while (Window.isOpen())
     {
@@ -70,25 +86,44 @@ bool Game::Run()
 
 void Game::Render()
 {
+	m_crtShader.setUniform("time", m_clock.getElapsedTime().asSeconds());
+	m_renderTexture.clear();
 
-    Window.draw(m_MiddleLine);
-    m_LeftPaddle.Render(Window);
-    m_RightPaddle.Render(Window);
-    m_Ball.Render(Window);
+	m_ScreenRect.setFillColor({ 100, 100, 100, 10 });
+	m_renderTexture.draw(m_ScreenRect);
+	m_renderTexture.draw(m_MiddleLine);
+	m_LeftPaddle.Render(m_renderTexture);
+	m_RightPaddle.Render(m_renderTexture);
+	m_Ball.Render(m_renderTexture);
+	m_TopBorder.Render(m_renderTexture);
+	m_BottomBorder.Render(m_renderTexture);
+	m_LeftBorder.Render(m_renderTexture);
+	m_RightBorder.Render(m_renderTexture);
 
-    m_TopBorder.Render(Window);
-    m_BottomBorder.Render(Window);
-    m_LeftBorder.Render(Window);
-    m_RightBorder.Render(Window);
+	if (m_GameState == GameState::Starting ||
+		m_GameState == GameState::Paused ||
+		m_GameState == GameState::Over)
+	{
+		m_ScreenRect.setFillColor({ 0, 0, 0, 200 });
+		m_renderTexture.draw(m_ScreenRect);
+	}
 
-    if (m_GameState == GameState::Starting ||
-         m_GameState == GameState::Paused ||
-          m_GameState == GameState::Over)
-    {
-        Window.draw(m_ScreenRect);
-    }
-    m_UI.Render(Window);
+	m_UI.Render(m_renderTexture);
+
+	m_renderTexture.display();
+
+	m_renderSprite.setTexture(m_renderTexture.getTexture());
+
+	sf::Vector2u windowSize = Window.getSize();
+	m_renderSprite.setScale(
+		static_cast<float>(windowSize.x) / m_renderTexture.getSize().x,
+		static_cast<float>(windowSize.y) / m_renderTexture.getSize().y
+	);
+
+	Window.draw(m_renderSprite, &m_crtShader);
 }
+
+
 
 void Game::Update(float dt)
 {
@@ -124,7 +159,9 @@ void Game::Update(float dt)
 
 bool Game::CheckIfLeftPlayerScored()
 {
-    if (m_Ball.GetPosition().x > 740)
+    
+
+    if (m_Ball.GetPosition().x > WINDOW_WIDTH)
     {
         return true;
     }
@@ -212,7 +249,7 @@ void Game::StartingGame(float dt, sf::RenderWindow &window)
 {
     if (Input::IsKeyPressed(sf::Keyboard::Space))
     {
-        m_Ball.ResetPosition();
+        m_Ball.ResetPosition(*this);
         m_Ball.ChooseInitialVelocity();
         SetGameState(GameState::Playing);
     }

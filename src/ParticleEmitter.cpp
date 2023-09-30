@@ -13,7 +13,7 @@ void ParticleEmitter::Update(float dt)
     }
 }
 
-void ParticleEmitter::Render(sf::RenderWindow &window)
+void ParticleEmitter::Render(sf::RenderTexture& window)
 {
 
     for(auto &p : m_Particles)
