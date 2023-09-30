@@ -12,7 +12,7 @@ UI::UI(Game* game) : m_Game(game)
 
 bool UI::Init()
 {
-    auto f = FindFileUpwards("./", "ARCADECLASSIC.TTF");
+    auto f = FindInResources("./", "ARCADECLASSIC.TTF");
     if (!font.loadFromFile(f))
 	{
 		std::cout << "Error loading font" << std::endl;

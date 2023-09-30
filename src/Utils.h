@@ -6,15 +6,26 @@
 
 #include <SFML/Graphics.hpp>
 
-inline std::string FindFileUpwards(const std::filesystem::path& startDir, const std::string& targetFile) {
+#include <filesystem>
+#include <string>
+
+inline const char* TARGET_FOLDER = "resources";
+
+inline std::string FindInResources(const std::filesystem::path& startDir, const std::string& targetFile) {
     std::filesystem::path currentDir = std::filesystem::absolute(startDir);
 
     while (!currentDir.empty()) {
         std::filesystem::directory_iterator dirIt(currentDir), end;
 
         for (; dirIt != end; ++dirIt) {
-            if (dirIt->is_regular_file() && dirIt->path().filename() == targetFile) {
-                return dirIt->path().string();
+            if (dirIt->is_directory() && dirIt->path().filename() == TARGET_FOLDER) {
+                std::filesystem::path resourcesPath = dirIt->path();
+
+                for (const auto& entry : std::filesystem::directory_iterator(resourcesPath)) {
+                    if (entry.is_regular_file() && entry.path().filename() == targetFile) {
+                        return entry.path().string();
+                    }
+                }
             }
         }
 
@@ -32,6 +43,7 @@ inline std::string FindFileUpwards(const std::filesystem::path& startDir, const 
 
     return "";
 }
+
 
 inline void CenterTextX(sf::Text& text, const sf::Vector2u& windowSize) {
     // Get the bounding box of the text

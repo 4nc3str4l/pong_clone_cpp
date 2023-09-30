@@ -45,7 +45,7 @@ bool Game::Run()
     sf::Time timeSinceLastUpdate = sf::Time::Zero;
     sf::Time TimePerFrame = sf::seconds(1.f / 60.f);
 
-    if (!m_crtShader.loadFromFile(FindFileUpwards("./", "crt.vert"), FindFileUpwards("./", "crt.frag")))
+    if (!m_crtShader.loadFromFile(FindInResources("./", "crt.vert"), FindInResources("./", "crt.frag")))
     {
         std::cout << "Error loading shaders" << std::endl;
         return false;
