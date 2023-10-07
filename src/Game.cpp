@@ -2,6 +2,7 @@
 #include "constants.h"
 #include "Input.h"
 #include "Utils.h"
+#include "Scheduler.h"
 
 
 
@@ -127,7 +128,7 @@ void Game::Render()
 
 void Game::Update(float dt)
 {
-
+    ls::Scheduler::Tick();
     m_UI.Update(dt, Window);
 
     m_LeftPaddle.Update(dt, Window);
@@ -159,8 +160,6 @@ void Game::Update(float dt)
 
 bool Game::CheckIfLeftPlayerScored()
 {
-    
-
     if (m_Ball.GetPosition().x > WINDOW_WIDTH)
     {
         return true;

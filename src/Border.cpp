@@ -12,7 +12,7 @@ void Border::Render(sf::RenderTexture& window)
 
 void Border::Update(float dt, sf::RenderWindow &window)
 {
-    UpdateShake(dt);
+    Entity::Update(dt, window);
 }
 
 void Border::Set(sf::Vector2f position, sf::Vector2f size)

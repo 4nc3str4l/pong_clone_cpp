@@ -44,8 +44,8 @@ void Player::Update(float dt, sf::RenderWindow &window)
     {
         m_shape->move(0, PADDLE_SPEED * dt);
     }
-
-    UpdateShake(dt);
+    
+    Entity::Update(dt, window);
 }
 
 bool Player::IsCollidingUp(sf::RenderWindow &window)

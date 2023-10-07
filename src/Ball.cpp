@@ -29,7 +29,7 @@ void Ball::Update(float dt, sf::RenderWindow& window)
     m_NextParticleEmit -= dt;
 
     UpdateParticles(dt);
-    UpdateShake(dt);
+    Entity::Update(dt, window);
 }
 
 void Ball::UpdateParticles(float dt)

@@ -1,6 +1,5 @@
 #include "Entity.h"
 
-#include <SFML/Graphics.hpp>
 
 Entity::Entity(sf::Shape* shape) : m_shape(shape)
 {
@@ -11,6 +10,11 @@ Entity::~Entity()
     delete m_shape;
 }
 
+void Entity::Update(float dt, sf::RenderWindow& window)
+{
+    UpdateShake(dt);
+}
+
 
 void Entity::Shake(float duration, float scale)
 {
@@ -19,7 +23,6 @@ void Entity::Shake(float duration, float scale)
     m_ShakeTime = duration;
 }
 
-#include <iostream>
 void Entity::UpdateShake(float dt)
 {
     m_MissingShakeTime -= dt;
