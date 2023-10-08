@@ -8,15 +8,16 @@ using namespace ls;
 
 struct ShakeTask 
 {
-	float missingShakeTime;	
-	float shakeTime;
+	float startShakeTime;
+	float endShakeTime;
 	float scale = 1.0f;
 	sf::Transformable* object;
+	float shakeScale;
 };
 
 class ObjectShaker
 {
 public:
 	static void ShakeObject(sf::Transformable& object,
-		Milliseconds duration);
+		float duration, float shakeScale);
 };
