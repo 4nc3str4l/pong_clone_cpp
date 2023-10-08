@@ -1,14 +1,15 @@
 #include "ParticleEmitter.h"
 #include <algorithm>
+#include "Time.h"
 
-void ParticleEmitter::Update(float dt)
+void ParticleEmitter::Update()
 {
     for(auto &p : m_Particles)
     {
         if(p.Lifetime > 0.f)
         {
-            p.Position += p.Velocity * dt;
-            p.Lifetime -= dt;
+            p.Position += p.Velocity * Time::GetDeltaTime();
+            p.Lifetime -= Time::GetDeltaTime();
         }
     }
 }

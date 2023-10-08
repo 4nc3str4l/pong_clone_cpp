@@ -78,7 +78,7 @@ void UI::SetRightScore(uint8_t score)
     rightScore.setString(std::to_string(score));
 }
 
-void UI::Update(float dt, sf::RenderWindow& window)
+void UI::Update( sf::RenderWindow& window)
 {
     // Do nothing for now
 }

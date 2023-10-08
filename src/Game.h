@@ -30,7 +30,7 @@ public:
     bool Run();
 
     void Render();
-    void Update(float dt);
+    void Update();
 
     inline GameState GetGameState() const { return m_GameState; }
     void ShakeBorder(BorderType borderType);
@@ -39,10 +39,10 @@ private:
     bool CheckIfLeftPlayerScored();
     bool CheckIfRightPlayerScored();
 
-    void InGameUpdate(float dt, sf::RenderWindow &window);
-    void StartingGame(float dt, sf::RenderWindow &window);
-    void UpdatePaused(float dt, sf::RenderWindow &window);
-    void UpdateGameOver(float dt, sf::RenderWindow &window);
+    void InGameUpdate(sf::RenderWindow &window);
+    void StartingGame(sf::RenderWindow &window);
+    void UpdatePaused(sf::RenderWindow &window);
+    void UpdateGameOver(sf::RenderWindow &window);
     void SetGameState(GameState state);
 
     void OnPlayerScored(bool isLeftPlayer);

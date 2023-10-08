@@ -10,9 +10,9 @@ void Border::Render(sf::RenderTexture& window)
     window.draw(*m_shape);
 }
 
-void Border::Update(float dt, sf::RenderWindow &window)
+void Border::Update(sf::RenderWindow &window)
 {
-    Entity::Update(dt, window);
+    Entity::Update(window);
 }
 
 void Border::Set(sf::Vector2f position, sf::Vector2f size)

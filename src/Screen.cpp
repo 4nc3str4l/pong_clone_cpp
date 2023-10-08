@@ -5,9 +5,9 @@ Screen::Screen() : Entity(nullptr)
 {
 }
 
-void Screen::Update(float dt, sf::RenderWindow& window)
+void Screen::Update(sf::RenderWindow& window)
 {
-	Entity::Update(dt, window);
+	Entity::Update(window);
 }
 
 void Screen::Render(sf::RenderTexture &window)

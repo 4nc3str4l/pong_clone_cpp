@@ -11,7 +11,7 @@ public:
     bool Init();
 
     void Render(sf::RenderTexture& window);
-    void Update(float dt, sf::RenderWindow& window);
+    void Update(sf::RenderWindow& window);
 
     void SetLeftScore(uint8_t score);
     void SetRightScore(uint8_t score);
@@ -26,7 +26,6 @@ private:
     sf::Text instructions;
     sf::Text winner;
     sf::Font font;
-
 
     Game* m_Game;
 };

@@ -3,7 +3,7 @@
 #include "constants.h"
 
 #include <iostream>
-
+#include "Time.h"
 
 Player::Player(bool isLeft)
     : m_isLeft(isLeft), Entity(new sf::RectangleShape())
@@ -32,20 +32,20 @@ void Player::Render(sf::RenderTexture& window)
     window.draw(*m_shape);
 }
 
-void Player::Update(float dt, sf::RenderWindow &window)
+void Player::Update(sf::RenderWindow &window)
 {
 
     if (Input::IsKeyPressed(m_upKey) && !IsCollidingUp(window))
     {
-        m_shape->move(0, -PADDLE_SPEED * dt);
+        m_shape->move(0, -PADDLE_SPEED * Time::GetDeltaTime());
     }
 
     if (Input::IsKeyPressed(m_downKey) && !IsCollidingDown(window))
     {
-        m_shape->move(0, PADDLE_SPEED * dt);
+        m_shape->move(0, PADDLE_SPEED * Time::GetDeltaTime());
     }
     
-    Entity::Update(dt, window);
+    Entity::Update(window);
 }
 
 bool Player::IsCollidingUp(sf::RenderWindow &window)

@@ -14,14 +14,14 @@ class Ball : public Entity
 {
 public:
     Ball();
-    void Update(float dt, sf::RenderWindow &window) override;
+    void Update(sf::RenderWindow &window) override;
     void Render(sf::RenderTexture& window) override;
     void ChooseInitialVelocity();
     void ResetPosition(Game& game);
     void CheckBoundaries(Game* game);
     void CheckCollision(Player& player);
     void EmitRandomParticles(int num);
-    void UpdateParticles(float dt);
+    void UpdateParticles();
 public:
     float Radius{0.0f};
 

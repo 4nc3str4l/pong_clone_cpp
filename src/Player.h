@@ -11,7 +11,7 @@ class Player : public Entity
 public:
     explicit Player(bool isLeft);
     void Render(sf::RenderTexture& window) override;
-    void Update(float dt, sf::RenderWindow &window) override;
+    void Update(sf::RenderWindow &window) override;
 private:
     bool IsCollidingUp(sf::RenderWindow &window);
     bool IsCollidingDown(sf::RenderWindow &window);

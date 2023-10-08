@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "Maths.h"
 #include "Game.h"
+#include "Time.h"
 
 Ball::Ball() : Entity(new sf::CircleShape())
 {
@@ -14,9 +15,9 @@ Ball::Ball() : Entity(new sf::CircleShape())
     Radius = circle->getRadius();
 }
 
-void Ball::Update(float dt, sf::RenderWindow& window)
+void Ball::Update(sf::RenderWindow& window)
 {
-    m_shape->move(m_Velocity * dt);
+    m_shape->move(m_Velocity * Time::GetDeltaTime());
     if((m_Velocity.x != 0 || m_Velocity.y != 0) && m_NextParticleEmit <= 0)
     {
         m_ParticleEmitter.Emit(GetPosition(),
@@ -26,15 +27,15 @@ void Ball::Update(float dt, sf::RenderWindow& window)
                                Radius);
         m_NextParticleEmit =  EMISSION_RATE;
     }
-    m_NextParticleEmit -= dt;
+    m_NextParticleEmit -= Time::GetDeltaTime();
 
-    UpdateParticles(dt);
-    Entity::Update(dt, window);
+    UpdateParticles();
+    Entity::Update(window);
 }
 
-void Ball::UpdateParticles(float dt)
+void Ball::UpdateParticles()
 {
-    m_ParticleEmitter.Update(dt);
+    m_ParticleEmitter.Update();
 }
 
 void Ball::ResetPosition(Game& game)

@@ -18,7 +18,7 @@ public:
     ParticleEmitter() = default;
     ~ParticleEmitter() = default;
 
-    void Update(float dt);
+    void Update();
     void Render(sf::RenderTexture& window);
 
     void Emit(const sf::Vector2f &position,

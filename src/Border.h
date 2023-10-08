@@ -8,7 +8,7 @@ class Border : public Entity
 public:
     Border();
     void Render(sf::RenderTexture& window) override;
-    void Update(float dt, sf::RenderWindow &window) override;
+    void Update(sf::RenderWindow &window) override;
     void Set(sf::Vector2f position, sf::Vector2f size);
     void SetPivot(sf::Vector2f pivot);
 private:

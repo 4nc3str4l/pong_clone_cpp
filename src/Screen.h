@@ -8,7 +8,7 @@ public:
     Screen();
     ~Screen() = default;
 
-    void Update(float dt, sf::RenderWindow &window) override;
+    void Update(sf::RenderWindow &window) override;
     void Render(sf::RenderTexture &window) override;
 
     void SetScreenSize(const sf::Vector2f &size);

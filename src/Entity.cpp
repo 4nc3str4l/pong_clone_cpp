@@ -1,5 +1,5 @@
 #include "Entity.h"
-
+#include "Time.h"
 
 Entity::Entity(sf::Shape* shape) : m_shape(shape)
 {
@@ -10,9 +10,9 @@ Entity::~Entity()
     delete m_shape;
 }
 
-void Entity::Update(float dt, sf::RenderWindow& window)
+void Entity::Update(sf::RenderWindow& window)
 {
-    UpdateShake(dt);
+    UpdateShake();
 }
 
 
@@ -23,9 +23,9 @@ void Entity::Shake(float duration, float scale)
     m_ShakeTime = duration;
 }
 
-void Entity::UpdateShake(float dt)
+void Entity::UpdateShake()
 {
-    m_MissingShakeTime -= dt;
+    m_MissingShakeTime -= Time::GetDeltaTime();
     float scale = 1.0f;
 
     if (m_MissingShakeTime > 0)

@@ -3,6 +3,7 @@
 #include "Input.h"
 #include "Utils.h"
 #include "Scheduler.h"
+#include "Time.h"
 
 
 
@@ -40,8 +41,6 @@ bool Game::Run()
     m_BottomBorder.Set(sf::Vector2f(0, WINDOW_HEIGHT), sf::Vector2f(WINDOW_WIDTH, broderSize));
     m_BottomBorder.SetPivot(sf::Vector2f(0, broderSize));
 
-    sf::Clock clock;
-    sf::Time dt;
 
     sf::Time timeSinceLastUpdate = sf::Time::Zero;
     sf::Time TimePerFrame = sf::seconds(1.f / 60.f);
@@ -59,28 +58,26 @@ bool Game::Run()
     }
 
     states.shader = &m_crtShader;
+    sf::Clock clock;
 
-    while (Window.isOpen())
-    {
-        dt = clock.restart();
-        timeSinceLastUpdate += dt;
+	while (Window.isOpen())
+	{
+		sf::Time elapsedTime = clock.restart(); 
+		timeSinceLastUpdate += elapsedTime; 
 
-        float deltaTime = timeSinceLastUpdate.asSeconds();
+		Window.clear();
+		Input::Update(Window);
 
-        Window.clear();
+		while (timeSinceLastUpdate > TimePerFrame)
+		{
+			timeSinceLastUpdate -= TimePerFrame;
+			Update();
+		}
 
-        Input::Update(Window);
+		Render();
 
-        while (timeSinceLastUpdate > TimePerFrame)
-        {
-            timeSinceLastUpdate -= TimePerFrame;
-            Update(deltaTime);
-        }
-
-        Render();
-
-        Window.display();
-    }
+		Window.display();
+	}
 
     return true;
 }
@@ -125,33 +122,34 @@ void Game::Render()
 }
 
 
-
-void Game::Update(float dt)
+void Game::Update()
 {
+    Time::Update();
+    
     ls::Scheduler::Tick();
-    m_UI.Update(dt, Window);
+    m_UI.Update(Window);
 
-    m_LeftPaddle.Update(dt, Window);
-    m_RightPaddle.Update(dt, Window);
+    m_LeftPaddle.Update(Window);
+    m_RightPaddle.Update(Window);
 
-    m_TopBorder.Update(dt, Window);
-    m_BottomBorder.Update(dt, Window);
-    m_LeftBorder.Update(dt, Window);
-    m_RightBorder.Update(dt, Window);
+    m_TopBorder.Update(Window);
+    m_BottomBorder.Update(Window);
+    m_LeftBorder.Update(Window);
+    m_RightBorder.Update(Window);
 
     switch (m_GameState)
     {
     case GameState::Starting:
-        StartingGame(dt, Window);
+        StartingGame(Window);
         break;
     case GameState::Playing:
-        InGameUpdate(dt, Window);
+        InGameUpdate(Window);
         break;
     case GameState::Paused:
-        UpdatePaused(dt, Window);
+        UpdatePaused(Window);
         break;
     case GameState::Over:
-        UpdateGameOver(dt, Window);
+        UpdateGameOver(Window);
         break;
     default:
         break;
@@ -176,9 +174,9 @@ bool Game::CheckIfRightPlayerScored()
     return false;
 }
 
-void Game::InGameUpdate(float dt, sf::RenderWindow &window)
+void Game::InGameUpdate(sf::RenderWindow &window)
 {
-    m_Ball.Update(dt, window);
+    m_Ball.Update(window);
     m_Ball.CheckCollision(m_LeftPaddle);
     m_Ball.CheckCollision(m_RightPaddle);
     m_Ball.CheckBoundaries(this);
@@ -244,7 +242,7 @@ void Game::ShakeBorder(BorderType borderType)
     }
 }
 
-void Game::StartingGame(float dt, sf::RenderWindow &window)
+void Game::StartingGame(sf::RenderWindow &window)
 {
     if (Input::IsKeyPressed(sf::Keyboard::Space))
     {
@@ -256,11 +254,11 @@ void Game::StartingGame(float dt, sf::RenderWindow &window)
     if (m_LeftScore != 0 || m_RightScore != 0)
     {
         m_Ball.EmitRandomParticles(10);
-        m_Ball.UpdateParticles(dt);
+        m_Ball.UpdateParticles();
     }
 }
 
-void Game::UpdatePaused(float dt, sf::RenderWindow &window)
+void Game::UpdatePaused(sf::RenderWindow &window)
 {
     if (Input::IsKeyPressed(sf::Keyboard::Space))
     {
@@ -268,7 +266,7 @@ void Game::UpdatePaused(float dt, sf::RenderWindow &window)
     }
 }
 
-void Game::UpdateGameOver(float dt, sf::RenderWindow &window)
+void Game::UpdateGameOver(sf::RenderWindow &window)
 {
     if (Input::IsKeyPressed(sf::Keyboard::R))
     {

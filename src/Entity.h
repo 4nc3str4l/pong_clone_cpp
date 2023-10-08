@@ -11,12 +11,12 @@ public:
     Entity(sf::Shape* shape);
     virtual ~Entity();
     virtual void Render(sf::RenderTexture& window) = 0;
-    virtual void Update(float dt, sf::RenderWindow& window);
+    virtual void Update(sf::RenderWindow& window);
     inline sf::FloatRect GetBounds() const { return m_shape->getGlobalBounds(); }
     inline sf::Vector2f GetPosition() const { return m_shape->getPosition(); }
     void Shake(float duration = SHAKE_TIME, float scale = 1.0f);
 protected:
-    void UpdateShake(float dt);
+    void UpdateShake();
 
 protected:
     sf::Shape* m_shape;
